@@ -22,6 +22,19 @@ npm install oneapm-cli -g
 
 ## Usage
 
-```sh
-oneapm YOUR_FILE_NAME
+```
+Usage: /Users/wyvern/npm-global/bin/oneapm <command> [options] filename
+
+Commands:
+  start  Use oneapm to start an application
+
+Options:
+  -h, --help     Show this message                                     [boolean]
+  -v, --version  Show version number                                   [boolean]
+  -H, --host                                              [default: "127.0.0.1"]
+  -p, --port                                                     [default: 8088]
+
+Examples:
+  start  oneapm start index.js
+
 ```
