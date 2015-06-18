@@ -28,5 +28,11 @@
   "homepage": "https://github.com/oneapm/oneapm-cli#readme",
   "devDependencies": {
     "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "express": "^4.12.4",
+    "pidusage": "^0.1.1",
+    "v8-debug": "^0.4.6",
+    "v8-profiler": "^5.2.9"
   }
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OneAPM</title>
+</head>
+<body>
+<h1 data-bind="text:pid"></h1>
+<h2><span data-bind="text:cpu"></span></h2>
+</body>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/knockout-3.3.0.js"></script>
+<script type="text/javascript">
+  var app={};
+
+  app.pid=ko.observable();
+  app.cpu=ko.observable();
+
+  $.get('/current',function(pid){
+    app.pid(pid);
+    setInterval(getDetail,100,pid);
+
+  })
+
+  function getDetail(pid){
+    $.getJSON('/process/'+pid,function(ret){
+      app.cpu(ret.cpu);
+    });
+  }
+
+
+  ko.applyBindings(app)
+
+</script>
+</html>
