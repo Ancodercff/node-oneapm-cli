@@ -1,0 +1,32 @@
+{
+  "name": "oneapm-cli",
+  "version": "0.0.1",
+  "description": "Command line for OneAPM NodeJS Agent",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "bin": {
+    "oneapm": "./bin/oneapm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oneapm/oneapm-cli.git"
+  },
+  "keywords": [
+    "oneapm",
+    "performance",
+    "profiler",
+    "gc",
+    "heap"
+  ],
+  "author": "nodejs@oneapm.com",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/oneapm/oneapm-cli/issues"
+  },
+  "homepage": "https://github.com/oneapm/oneapm-cli#readme",
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  }
+}
