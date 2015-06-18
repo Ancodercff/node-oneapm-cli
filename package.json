@@ -30,11 +30,13 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
+    "chalk": "^1.0.0",
     "express": "^4.12.4",
     "pidusage": "^0.1.1",
     "v8-debug": "^0.4.6",
     "v8-profiler": "^5.2.9",
-    "ws": "^0.7.2"
+    "ws": "^0.7.2",
+    "yargs": "^3.11.0"
   },
   "preferGlobal": true
 }

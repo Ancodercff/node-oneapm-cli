@@ -2,11 +2,40 @@
 "use strict";
 
 var child_process = require('child_process');
+var chalk = require('chalk');
 
-var fileName = process.argv[process.argv.length - 1];
+var argv = require('yargs')
+  .usage('Usage: $0 <command> [options] filename')
 
+  .command('start', 'Use oneapm to start an application')
+  .example('start', 'oneapm start index.js')
 
-// FIXME: choose a command line tool
+  .demand(1)
+
+  .default('host', '127.0.0.1', 'Dashboard server hostname')
+  .default('port', 8088, 'Dashboard server port')
+
+  .help('help')
+  .describe('help', 'Show this message')
+
+  .alias('p', 'port')
+  .alias('H', 'host')
+  .alias('h', 'help')
+  .alias('v', 'version')
+
+  .version(function () {
+    return require('../package').version;
+  })
+
+  .epilog('Copyright 2015, OneAPM, Inc')
+  .argv;
+
+var fileName = argv._.pop();
+
+var port = argv.port;
+
+var host = argv.host;
+
 var cookedFileName = require('path').join(process.cwd(), fileName);
 
 var p = child_process.spawn('node', [cookedFileName], {
@@ -20,10 +49,6 @@ p.on('close', function (exitCode) {
 
 var server = require('../lib/MonitorServer.js')(p);
 
-server.listen(8088, function () {
-
-  // FIXME: use chalk to customize color
-  console.log('>Visit http://127.0.0.1:8088 to see the dashboard');
-  console.log('>pid=' + p.pid);
-  console.log();
+server.listen(port, host, function () {
+  console.log(chalk.green('[ok]') + ' Visit http://%s:%d to see the dashboard of pid=%d', host, port, p.pid);
 });
