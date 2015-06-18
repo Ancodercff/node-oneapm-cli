@@ -7,8 +7,14 @@
 
 Command line for OneAPM NodeJS agent
 
+## Installation
+
+```sh
+npm install oneapm-cli -g
+```
+
 ## Usage
 
-```
-oneapm filename
+```sh
+oneapm YOUR_FILE_NAME
 ```

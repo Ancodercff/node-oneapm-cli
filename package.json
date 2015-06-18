@@ -34,5 +34,6 @@
     "pidusage": "^0.1.1",
     "v8-debug": "^0.4.6",
     "v8-profiler": "^5.2.9"
-  }
+  },
+  "preferGlobal":true
 }
