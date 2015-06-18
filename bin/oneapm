@@ -19,6 +19,7 @@ p.on('close', function (exitCode) {
 });
 
 var server = require('../lib/MonitorServer.js')(p);
+
 server.listen(8088, function () {
 
   // FIXME: use chalk to customize color
