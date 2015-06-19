@@ -1,6 +1,6 @@
 {
   "name": "oneapm-cli",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Command line for OneAPM NodeJS Agent",
   "main": "index.js",
   "scripts": {
