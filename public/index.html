@@ -27,6 +27,14 @@
 <h5>CPU <sub data-bind="text:cpu().toFixed(1)+'%'"></sub></h5>
 <svg id="memoryUsage" width="600"></svg>
 
+<h5>Control</h5>
+
+<div>
+  <button id="heapsnapshot" onclick="$.get('/action/takeSnapshot');return false;">Heap Snapshot</button>
+  <button id="heapsnapshot" onclick="$.get('/action/startProfiling');return false;">startProfiling</button>
+  <button id="heapsnapshot" onclick="$.get('/action/stopProfiling');return false;">stopProfiling</button>
+</div>
+
 </body>
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/knockout-3.3.0.js"></script>

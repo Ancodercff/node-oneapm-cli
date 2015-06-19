@@ -1,3 +1,8 @@
+# 2015/06/19 0.0.7
+ 
+- cpu profile
+- heap snapshot
+
 # 2015/06/19 0.0.6 
 
 cpu utilization reporting via web socket

@@ -38,10 +38,23 @@ var host = argv.host;
 
 var cookedFileName = require('path').join(process.cwd(), fileName);
 
-var p = child_process.spawn('node', [cookedFileName], {
-  env: process.env,
+var fs = require('fs');
+
+var conent = fs.readFileSync(cookedFileName).toString();
+var injectContent = fs.readFileSync(require('path').join(__dirname, '..', 'inject.js')).toString();
+
+var debug = require('debug')('oneapm-master-pid.' + process.pid);
+
+fs.writeFileSync(cookedFileName + '.mod', injectContent + '\n' + conent);
+
+var p = child_process.spawn('node', [cookedFileName + '.mod'], {
+  env: require('util')._extend(process.env, {
+    NODE_PATH: process.env.NODE_PATH + ":" + require('path').join(__dirname, '..', 'node_modules')
+  }),
   stdio: 'inherit'
 });
+
+debug('child spawned pid=%d', p.pid);
 
 p.on('close', function (exitCode) {
   process.exit(exitCode);
@@ -50,8 +63,21 @@ p.on('close', function (exitCode) {
 var server = require('../lib/MonitorServer.js')(p);
 
 server.listen(port, host, function () {
-  console.log(chalk.green('[ok]') + ' Visit http://%s:%d to see the dashboard of pid=%d', host, port, p.pid);
+  debug('Visit http://%s:%d to see the dashboard', host, port, p.pid);
 });
 
+require('../lib/WSServer')(8007, p.pid);
 
-require('../lib/WSServer')(8007,p.pid);
+var WebSocketServer = require('ws').Server;
+
+var wss = new WebSocketServer({
+  port: 8006
+});
+
+wss.on('connection', function (ws) {
+  p.ws = ws;
+  ws.on('message', function (msg) {
+    debug('message received:%s', msg);
+  })
+  ws.send('ping')
+})
