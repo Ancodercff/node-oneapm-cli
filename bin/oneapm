@@ -15,8 +15,12 @@ var argv = require('yargs')
 
   .demand(1)
 
-  .default('host', '127.0.0.1', 'Dashboard server hostname')
-  .default('port', 8088, 'Dashboard server port')
+  .default('host', '127.0.0.1')
+  .describe('host', 'Dashboard server hostname')
+  .default('port', 8088)
+  .describe('port', 'Dashboard server port')
+  .default('duration', 1000)
+  .describe('duration', 'Slave reporting duration in milliseconds')
 
   .help('help')
   .describe('help', 'Show this message')
@@ -25,6 +29,7 @@ var argv = require('yargs')
   .alias('H', 'host')
   .alias('h', 'help')
   .alias('v', 'version')
+  .alias('d', 'duration')
 
   .version(function () {
     return require('../package').version;
@@ -35,6 +40,7 @@ var argv = require('yargs')
 
 var port = argv.port;
 var host = argv.host;
+var duration = argv.duration;
 
 var fileName = argv._.pop();
 var newFile = createInjectedFile(fileName);
@@ -42,7 +48,7 @@ var newFile = createInjectedFile(fileName);
 var newProcess = child_process.spawn('node', [newFile], {
   env: require('util')._extend(process.env, {
     ONEAPM_MASRER_SERVER: 'ws://127.0.0.1:' + port + '/internal',
-    ONEAPM_REPORTING_DURATION: 100,
+    ONEAPM_REPORTING_DURATION: duration,
     NODE_PATH: process.env.NODE_PATH + ":" + require('path').join(__dirname, '..', 'node_modules')
   }),
   stdio: 'inherit'

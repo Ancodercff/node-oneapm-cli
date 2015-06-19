@@ -1,3 +1,7 @@
+# 2015/06/19 0.0.8
+
+- code readability
+
 # 2015/06/19 0.0.7
  
 - cpu profile
