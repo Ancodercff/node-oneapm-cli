@@ -1,6 +1,6 @@
 {
   "name": "oneapm-cli",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Command line for OneAPM NodeJS Agent",
   "main": "index.js",
   "scripts": {
@@ -29,8 +29,8 @@
   "devDependencies": {
     "mocha": "^2.2.5"
   },
-  "publishConfig":{
-    "registry":"https://registry.npmjs.com"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.com"
   },
   "dependencies": {
     "chalk": "^1.0.0",
