@@ -1,16 +1,20 @@
-# 0.0.5
+# 2015/06/19 0.0.6 
+
+cpu utilization reporting via web socket
+
+# 2015/06/18 0.0.5
 
 - command line options
 - color in message
 
-# 0.0.4 
+# 2015/06/18 0.0.4 
 
 - change log
 
-# 0.0.3
+# 2015/06/18 0.0.3
 
 - dashboard server poc
 
-# 0.0.2
+# 2015/06/18 0.0.2
 
 - command line poc

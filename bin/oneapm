@@ -52,3 +52,6 @@ var server = require('../lib/MonitorServer.js')(p);
 server.listen(port, host, function () {
   console.log(chalk.green('[ok]') + ' Visit http://%s:%d to see the dashboard of pid=%d', host, port, p.pid);
 });
+
+
+require('../lib/WSServer')(8007,p.pid);

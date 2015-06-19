@@ -1,33 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>OneAPM</title>
+  <meta charset="UTF-8">
+  <title>OneAPM</title>
+
+  <style>
+    svg {
+      box-shadow: 0 0 4px #cccccc;
+    }
+  </style>
 </head>
 <body>
 <h1 data-bind="text:pid"></h1>
-<h2><span data-bind="text:cpu"></span></h2>
+
+<h2></h2>
+
+
+<h5>Status:</h5>
+<img id="loading" alt="loading" src="img/loading.gif">
+
+<h5>Messages Received:</h5>
+
+<div id="messages">
+</div>
+
+<h5>CPU <sub data-bind="text:cpu().toFixed(1)+'%'"></sub></h5>
+<svg id="memoryUsage" width="600"></svg>
+
 </body>
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/knockout-3.3.0.js"></script>
+<script type="text/javascript" src="/js/d3.js"></script>
 <script type="text/javascript">
-  var app={};
+  var app = {};
 
-  app.pid=ko.observable();
-  app.cpu=ko.observable();
+  app.pid = ko.observable();
+  app.cpu = ko.observable();
 
-  $.get('/current',function(pid){
+  $.get('/current', function (pid) {
     app.pid(pid);
-    setInterval(getDetail,100,pid);
+    setInterval(getDetail, 100, pid);
+  });
 
-  })
-
-  function getDetail(pid){
-    $.getJSON('/process/'+pid,function(ret){
+  function getDetail(pid) {
+    $.getJSON('/process/' + pid, function (ret) {
       app.cpu(ret.cpu);
-    });
+    })
   }
 
+  var ws = new WebSocket('ws://localhost:8007');
+
+  ws.onopen = function () {
+    console.log(arguments);
+    $("#loading").replaceWith($('<div>').text('connected'));
+  }
+
+  ws._callbacks = {};
+
+  ws.on = function (type, cb) {
+    ws._callbacks[type] = ws._callbacks[type] || $.Callbacks();
+    ws._callbacks[type].add(cb);
+  }
+
+  ws.onmessage = function (e) {
+    var messageEntity = JSON.parse(e.data);
+    var messageBody = messageEntity.data;
+    var messageType = messageEntity.type;
+
+    if (ws._callbacks[messageType]) {
+      ws._callbacks[messageType].fireWith(ws, messageBody);
+    }
+
+  }
+
+  ws.on('broadcast', function () {
+    console.log(arguments);
+  })
+
+  ws.on('welcome', function (message) {
+    $("<div>").text(message).prepend($("<span>").addClass("timestamp").text(new Date)).appendTo("#messages");
+  })
+
+  var memoryUsageData = [];
+
+  var scale = d3.scale.linear();
+  var svgBars = d3.select('#memoryUsage').selectAll('rect');
+
+  ws.on('pidusage', function (data) {
+    memoryUsageData.push(data);
+
+    if (memoryUsageData.length > 200) {
+      memoryUsageData.shift();
+    }
+
+
+    var domain = [0, 100];
+
+
+    scale.domain(domain).range([140, 10]);
+
+    var p = d3.select('#memoryUsage').selectAll('rect').data(memoryUsageData, function (d) {
+      return d.id;
+    }).attr({
+      x: function (datum, i) {
+        return i * 3;
+      },
+      width: 2,
+      y: function (datum) {
+        return scale(datum.cpu);
+      },
+      height: 2,
+      id: function (datum) {
+        return datum.id
+      }
+    });
+
+    p.enter().append('rect').attr({
+      x: function (datum, i) {
+        return i * 3;
+      },
+      width: 2,
+      y: function (datum) {
+        return scale(datum.cpu);
+      },
+      height: 2,
+      id: function (datum) {
+        return datum.id
+      }
+    });
+
+    p.exit().remove();
+  });
 
   ko.applyBindings(app)
 
