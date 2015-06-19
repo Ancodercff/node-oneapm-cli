@@ -56,7 +56,7 @@
     })
   }
 
-  var ws = new WebSocket('ws://localhost:8007');
+  var ws = new WebSocket('ws://localhost:8088/frontend');
 
   ws.onopen = function () {
     console.log(arguments);
@@ -101,43 +101,31 @@
       memoryUsageData.shift();
     }
 
-
     var domain = [0, 100];
-
 
     scale.domain(domain).range([140, 10]);
 
+    var processing = {
+      x: function (datum, i) {
+        return i * 3;
+      },
+      width: 2,
+      y: function (datum) {
+        return scale(datum.cpu);
+      },
+      height: 2,
+      id: function (datum) {
+        return datum.id
+      }
+    };
+
     var p = d3.select('#memoryUsage').selectAll('rect').data(memoryUsageData, function (d) {
       return d.id;
-    }).attr({
-      x: function (datum, i) {
-        return i * 3;
-      },
-      width: 2,
-      y: function (datum) {
-        return scale(datum.cpu);
-      },
-      height: 2,
-      id: function (datum) {
-        return datum.id
-      }
-    });
+    }).attr(processing);
 
-    p.enter().append('rect').attr({
-      x: function (datum, i) {
-        return i * 3;
-      },
-      width: 2,
-      y: function (datum) {
-        return scale(datum.cpu);
-      },
-      height: 2,
-      id: function (datum) {
-        return datum.id
-      }
-    });
-
+    p.enter().append('rect').attr(processing);
     p.exit().remove();
+
   });
 
   ko.applyBindings(app)

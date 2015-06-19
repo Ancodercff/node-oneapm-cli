@@ -38,3 +38,7 @@ Examples:
   start  oneapm start index.js
 
 ```
+## Output
+
+cpuprofile
+snapshot

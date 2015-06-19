@@ -27,3 +27,4 @@ build/Release
 node_modules
 
 .idea
+example/simple_http.js.mod

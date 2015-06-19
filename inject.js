@@ -7,9 +7,29 @@ var debug = require('debug')('oneapm-child-pid.' + process.pid);
 debug('indejcted');
 
 setTimeout(function () {
-  var ws = new WebSocket('ws://127.0.0.1:8006/');
+
+  var ws = new WebSocket('ws://127.0.0.1:' + process.env.ONEAPM_CLI_PORT + '/internal');
+
+  ws.on('open', function () {
+    setInterval(function () {
+
+      var message = {};
+
+      message.pid = process.pid;
+      message.memoryUsage = process.memoryUsage();
+
+      ws.send(JSON.stringify(message));
+
+    }, 1000)
+  });
+
+  ws.on('error', function (err) {
+    debug('error connecting to master', err);
+  });
+
   ws.on('message', function (msg) {
     debug('message received:%s ', msg.toString());
+
     switch (msg) {
       case 'takeSnapshot':
         var snapShot = profiler.takeSnapshot();
@@ -21,21 +41,29 @@ setTimeout(function () {
         snapShot.serialize(function (line, length) {
           output.write(line);
         }, String);
+
         debug('snapshot file created %s', filename);
 
         break;
       case 'startProfiling':
         profiler.startProfiling();
+
         debug('startProfiling');
+
         break;
       case 'stopProfiling':
         var cpuProfile = profiler.stopProfiling();
+
         debug('cpuprofile created %s', cpuProfile.title);
+
         var filename = Date.now() + '.cpuprofile'
         require('fs').writeFileSync(filename, JSON.stringify(cpuProfile));
+
         debug('cpuprofile file created ', filename);
+
       case 'ping':
         ws.send('pong');
+
         break;
     }
   });
