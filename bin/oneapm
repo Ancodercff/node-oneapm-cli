@@ -3,6 +3,9 @@
 
 var child_process = require('child_process');
 var chalk = require('chalk');
+var debug = require('debug')('oneapm-master-pid.' + process.pid);
+
+var createInjectedFile = require('../lib/CreateInjectedFile');
 
 var argv = require('yargs')
   .usage('Usage: $0 <command> [options] filename')
@@ -30,41 +33,30 @@ var argv = require('yargs')
   .epilog('Copyright 2015, OneAPM, Inc')
   .argv;
 
-var fileName = argv._.pop();
-
 var port = argv.port;
-
 var host = argv.host;
 
-var cookedFileName = require('path').join(process.cwd(), fileName);
+var fileName = argv._.pop();
+var newFile = createInjectedFile(fileName);
 
-var fs = require('fs');
-
-var conent = fs.readFileSync(cookedFileName).toString();
-var injectContent = fs.readFileSync(require('path').join(__dirname, '..', 'inject.js')).toString();
-var debug = require('debug')('oneapm-master-pid.' + process.pid);
-
-fs.writeFileSync(cookedFileName + '.mod', injectContent + '\n' + conent);
-
-var p = child_process.spawn('node', [cookedFileName + '.mod'], {
+var newProcess = child_process.spawn('node', [newFile], {
   env: require('util')._extend(process.env, {
-    ONEAPM_CLI_PORT: port,
+    ONEAPM_MASRER_SERVER: 'ws://127.0.0.1:' + port + '/internal',
+    ONEAPM_REPORTING_DURATION: 100,
     NODE_PATH: process.env.NODE_PATH + ":" + require('path').join(__dirname, '..', 'node_modules')
   }),
   stdio: 'inherit'
 });
 
-debug('child spawned pid=%d', p.pid);
-
-p.on('close', function (exitCode) {
+debug('child spawned pid=%d', newProcess.pid);
+newProcess.on('close', function (exitCode) {
   process.exit(exitCode);
 });
 
-var server = require('../lib/MonitorServer.js')(p);
+var server = require('../lib/MonitorServer.js')(newProcess);
+require('../lib/FrontendServer')(server, newProcess);
+require('../lib/InternalServer')(server, newProcess);
 
 server.listen(port, host, function () {
-  debug('Visit http://%s:%d to see the dashboard', host, port, p.pid);
+  debug('Visit http://%s:%d to see the dashboard', host, port, newProcess.pid);
 });
-
-require('../lib/WSServer')(server, p.pid);
-require('../lib/InternalServer')(server,p);

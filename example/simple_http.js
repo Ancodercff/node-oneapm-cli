@@ -5,5 +5,6 @@
 console.log(process.env);
 
 require('http').createServer(function (req, res) {
+  "use strict";
   res.end('ok');
 }).listen(3001);
