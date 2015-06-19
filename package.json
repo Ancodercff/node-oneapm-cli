@@ -29,6 +29,9 @@
   "devDependencies": {
     "mocha": "^2.2.5"
   },
+  "publishConfig":{
+    "registry":"https://registry.npmjs.com"
+  },
   "dependencies": {
     "chalk": "^1.0.0",
     "express": "^4.12.4",
