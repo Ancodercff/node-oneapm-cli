@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "chalk": "^1.0.0",
+    "debug": "^2.2.0",
     "express": "^4.12.4",
     "pidusage": "^0.1.1",
     "v8-debug": "^0.4.6",
