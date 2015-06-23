@@ -2,6 +2,7 @@
 
 ![NPM](https://img.shields.io/npm/v/oneapm-cli.svg?style=flat-square)
 ![NPM](https://img.shields.io/david/oneapm/oneapm-cli.svg?style=flat-square)
+[![Build Status](https://travis-ci.org/oneapm/oneapm-cli.svg?branch=master)](https://travis-ci.org/oneapm/oneapm-cli)
 
 Command line for OneAPM NodeJS agent
 
