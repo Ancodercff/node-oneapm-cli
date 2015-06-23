@@ -5,4 +5,4 @@ node_js:
 - "0.12"
 - "1"
 - "2"
-script: "./node_modules/.bin/oneapm ./example/simple_http.js"
+script: "./bin/oneapm ./example/simple_http.js"
