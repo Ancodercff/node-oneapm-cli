@@ -1,0 +1,13 @@
+{
+  "name": "oneapm-cli-experiments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./chrome/index.js",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chrome-debug-protocol": "^0.5.1",
+    "streamsearch": "^0.1.2",
+    "which": "^1.1.1"
+  }
+}
