@@ -1,11 +1,11 @@
 # oneapm-cli
 
-![NPM](https://david-dm.org/oneapm/oneapm-cli.svg)
-[![Build Status](https://travis-ci.org/oneapm/oneapm-cli.svg?branch=master)](https://travis-ci.org/oneapm/oneapm-cli)
+![NPM](https://david-dm.org/oneapm/node-oneapm-cli.svg)
+[![Build Status](https://travis-ci.org/oneapm/node-oneapm-cli.svg?branch=master)](https://travis-ci.org/oneapm/oneapm-cli)
 
 Command line for OneAPM NodeJS agent
 
-[![NPM](https://nodei.co/npm/oneapm-cli.png)](https://nodei.co/npm/oneapm-cli/)
+[![NPM](https://nodei.co/npm/node-oneapm-cli.png)](https://nodei.co/npm/oneapm-cli/)
 
 
 ## Features
